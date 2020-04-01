@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 import argparse
 import os
 default_dir = os.path.expanduser('~')+'/Downloads/'
-timeout_seconds = 8
+
 def check(outdir,username):
     with open(outdir+username+'_'+'grade_card.pdf', 'rb') as f:
         bytes=f.read()[:4]
@@ -15,7 +15,7 @@ def check(outdir,username):
         return file_type
 
 
-def main(sem,username,password,outdir):
+def main(sem,username,password,outdir,timeout_seconds):
 
     retry = True
 
@@ -117,12 +117,20 @@ parser.add_argument(
     default=default_dir,
     help='output directory')
 
+parser.add_argument(
+    '-t',
+    '--timeout',
+    dest='timeout_seconds',
+    action='store',
+    default=7,
+    help='request timeout in seconds')
+
 args = parser.parse_args()
 if args.sem and args.password:
     print('Download location: ',args.outdir)
     while True:
         try:
-            main(args.sem,args.username,args.password,args.outdir)
+            main(args.sem,args.username,args.password,args.outdir, args.timeout_seconds)
             file_type=check(args.outdir,args.username)
             if file_type != 'PDF':
                 continue
