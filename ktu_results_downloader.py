@@ -49,20 +49,20 @@ def main(sem,username,password,outdir,timeout_seconds):
         # Initial login
         while retry:
             print("trying to login")
-            req = s.get(url, headers=headers, timeout=timeout_seconds)
+            req = s.get(url, headers=headers, timeout=int(timeout_seconds))
             if req.status_code != 200:
                 print("Retrying to login")
                 continue
             soup = BeautifulSoup(req.content, 'html5lib')
             login_data_params['CSRF_TOKEN'] = soup.find('input', attrs={'name': 'CSRF_TOKEN'})['value']
-            req = s.post(url, params=login_data_params, headers=headers)
+            req = s.post(url, params=login_data_params, headers=headers, timeout=int(timeout_seconds))
             retry = False
         # get studid and semid
         retry = True
         grade_card_params['CSRF_TOKEN'] = login_data_params['CSRF_TOKEN']
         while retry:
             print('getting studid and semid')
-            req = s.post(grade_card_url, headers=headers, params=grade_card_params, timeout=timeout_seconds)
+            req = s.post(grade_card_url, headers=headers, params=grade_card_params, timeout=int(timeout_seconds))
             if req.status_code != 200:
                 print('retrying to get studid and semid')
                 continue
@@ -78,7 +78,7 @@ def main(sem,username,password,outdir,timeout_seconds):
         with open(outdir+username+'_'+'grade_card.pdf',"wb") as grade_card_file:
             while retry:
                 print('trying to download pdf')
-                req = s.get(pdf_url,headers=headers, params=download_params, timeout=timeout_seconds)
+                req = s.get(pdf_url,headers=headers, params=download_params, timeout=int(timeout_seconds))
                 if req.status_code != 200:
                     print("Retrying to download pdf")
                     continue
