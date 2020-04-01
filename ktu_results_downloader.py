@@ -17,7 +17,6 @@ def check(outdir,username):
 
 def main(sem,username,password,outdir,timeout_seconds):
 
-    retry = True
 
     string_id=[]
     headers = {
@@ -47,7 +46,7 @@ def main(sem,username,password,outdir,timeout_seconds):
         grade_card_url = 'https://app.ktu.edu.in/eu/res/semesterGradeCardListing.htm'
         pdf_url = 'https://app.ktu.edu.in/eu/pub/attachments.htm'
         # Initial login
-        while retry:
+        while True:
             print("trying to login")
             req = s.get(url, headers=headers, timeout=int(timeout_seconds))
             if req.status_code != 200:
@@ -56,11 +55,10 @@ def main(sem,username,password,outdir,timeout_seconds):
             soup = BeautifulSoup(req.content, 'html5lib')
             login_data_params['CSRF_TOKEN'] = soup.find('input', attrs={'name': 'CSRF_TOKEN'})['value']
             req = s.post(url, params=login_data_params, headers=headers, timeout=int(timeout_seconds))
-            retry = False
+            break
         # get studid and semid
-        retry = True
         grade_card_params['CSRF_TOKEN'] = login_data_params['CSRF_TOKEN']
-        while retry:
+        while True:
             print('getting studid and semid')
             req = s.post(grade_card_url, headers=headers, params=grade_card_params, timeout=int(timeout_seconds))
             if req.status_code != 200:
@@ -71,19 +69,17 @@ def main(sem,username,password,outdir,timeout_seconds):
             string_id=string_id.split('&')
             download_params['semId'] = urllib.parse.unquote(string_id[-2].strip('semId='))
             download_params['studId'] = urllib.parse.unquote(string_id[-1].strip('studId='))
-            retry = False
+            break
         # Download pdf
-        retry = True
-
         with open(outdir+username+'_'+'grade_card.pdf',"wb") as grade_card_file:
-            while retry:
+            while True:
                 print('trying to download pdf')
                 req = s.get(pdf_url,headers=headers, params=download_params, timeout=int(timeout_seconds))
                 if req.status_code != 200:
                     print("Retrying to download pdf")
                     continue
                 grade_card_file.write(req.content)
-                retry = False
+                break
 
 # CLI
 parser = argparse.ArgumentParser(
