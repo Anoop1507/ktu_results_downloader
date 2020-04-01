@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 import argparse
 import os
 default_dir = os.path.expanduser('~')+'/Downloads/'
+timeout_seconds = 8
 def check(outdir,username):
     with open(outdir+username+'_'+'grade_card.pdf', 'rb') as f:
         bytes=f.read()[:4]
@@ -48,7 +49,7 @@ def main(sem,username,password,outdir):
         # Initial login
         while retry:
             print("trying to login")
-            req = s.get(url, headers=headers, timeout=8)
+            req = s.get(url, headers=headers, timeout=timeout_seconds)
             if req.status_code != 200:
                 print("Retrying to login")
                 continue
@@ -61,7 +62,7 @@ def main(sem,username,password,outdir):
         grade_card_params['CSRF_TOKEN'] = login_data_params['CSRF_TOKEN']
         while retry:
             print('getting studid and semid')
-            req = s.post(grade_card_url, headers=headers, params=grade_card_params, timeout=8)
+            req = s.post(grade_card_url, headers=headers, params=grade_card_params, timeout=timeout_seconds)
             if req.status_code != 200:
                 print('retrying to get studid and semid')
                 continue
@@ -77,7 +78,7 @@ def main(sem,username,password,outdir):
         with open(outdir+username+'_'+'grade_card.pdf',"wb") as grade_card_file:
             while retry:
                 print('trying to download pdf')
-                req = s.get(pdf_url,headers=headers, params=download_params, timeout=8)
+                req = s.get(pdf_url,headers=headers, params=download_params, timeout=timeout_seconds)
                 if req.status_code != 200:
                     print("Retrying to download pdf")
                     continue
