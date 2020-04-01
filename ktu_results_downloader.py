@@ -5,6 +5,8 @@ import requests
 import urllib.parse
 from bs4 import BeautifulSoup
 import argparse
+import os
+default_dir = os.path.expanduser('~')+'/Downloads/'
 def check(outdir,username):
     with open(outdir+username+'_'+'grade_card.pdf', 'rb') as f:
         bytes=f.read()[:4]
@@ -111,7 +113,7 @@ parser.add_argument(
     '--output',
     dest='outdir',
     action='store',
-    default='/home/anoop/Downloads/',
+    default=default_dir,
     help='output directory')
 
 args = parser.parse_args()
