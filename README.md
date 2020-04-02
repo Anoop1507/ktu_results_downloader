@@ -10,7 +10,6 @@ Written as part of learning python.</p>
 
 
 * Python
-* Git
 
 ## 🤔 Why ?
 
