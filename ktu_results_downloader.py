@@ -6,7 +6,7 @@ import urllib.parse
 from bs4 import BeautifulSoup
 import argparse
 import os
-default_dir = os.path.expanduser('~')+'/Downloads/'
+default_dir = os.path.expanduser('~')+'/'
 # check if the pdf file for corrupt
 def check(outdir,username):
     with open(outdir+username+'_'+'grade_card.pdf', 'rb') as f:
