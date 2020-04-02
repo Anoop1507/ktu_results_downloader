@@ -92,7 +92,6 @@ parser.add_argument(
     '-u',
     '--user-name',
     dest='username' ,
-    default='<default>',
     action='store',
     help='username(your username)')
 parser.add_argument(
@@ -118,7 +117,7 @@ parser.add_argument(
     help='request timeout in seconds')
 
 args = parser.parse_args()
-if args.sem and args.password:
+if args.sem and args.username and args.password:
     print('Download location: ',args.outdir)
     while True:
         try:
