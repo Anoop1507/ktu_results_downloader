@@ -7,6 +7,7 @@ Written as part of learning python.</p>
 
 ## 🚧 Requirements
 <br/>
+
 * Python
 * Git
 
