@@ -7,17 +7,14 @@ from bs4 import BeautifulSoup
 import argparse
 import os
 default_dir = os.path.expanduser('~')+'/Downloads/'
-
+# check if the pdf file for corrupt
 def check(outdir,username):
     with open(outdir+username+'_'+'grade_card.pdf', 'rb') as f:
         bytes=f.read()[:4]
         file_type=bytes.decode().strip('%')
         return file_type
 
-
 def main(sem,username,password,outdir,timeout_seconds):
-
-
     string_id=[]
     headers = {
         'user-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.62 Safari/537.36'
@@ -32,14 +29,13 @@ def main(sem,username,password,outdir,timeout_seconds):
         'search': 'Search',
         'stdId': ''
     }
-
     grade_card_params['semesterId'] = sem
+    
     download_params = {
         'pageAction': 'downloadItextPDF',
         'package': 'result',
         'class': 'SemesterGradeCardReport'
     }
-
 
     with requests.Session() as s:
         url = 'https://app.ktu.edu.in/login.jsp'
