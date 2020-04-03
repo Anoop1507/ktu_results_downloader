@@ -12,7 +12,7 @@ default_dir = os.path.expanduser('~')+'/'
 def check(outdir,username):
     with open(outdir+username+'_'+'grade_card.pdf', 'rb') as f:
         # read magic bytes
-        bytes=f.read()[:4]
+        bytes=f.read(4)
         file_type=bytes.decode().strip('%')
         return file_type
 
