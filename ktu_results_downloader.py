@@ -81,34 +81,32 @@ def main(sem,username,password,outdir,timeout_seconds):
 
 # CLI
 parser = argparse.ArgumentParser(
-    description='A script to download KTU student results as pdf')
+    description='A script to download KTU student results as pdf.')
 
 parser.add_argument(
     '-s',
     '--semester',
     dest='sem',
     action='store',
-    help='semester eg: -s4')
+    help='semester no.')
 
 parser.add_argument(
     '-u',
     '--user-name',
     dest='username' ,
-    action='store',
-    help='username(your username)')
+    action='store')
 parser.add_argument(
     '-p',
     '--password',
     dest='password',
     action='store',
-    help='password')
+    help='prompt if not supplied')
 parser.add_argument(
     '-o',
     '--output',
     dest='outdir',
     action='store',
-    default=default_dir,
-    help='output directory')
+    default=default_dir)
 
 parser.add_argument(
     '-t',
