@@ -9,11 +9,11 @@ Written as part of learning python.</p>
 ## 🚧 Requirements
 
 
-* Python
+* Python 3
 
 ## 🤔 Why ?
 
-When ktu publishes result usually their servers are overloaded to the point its almost impossible to view result for several hours. 
+Whenever ktu publishes results usually their servers are overloaded to the point its almost impossible to view result for several hours. 
 
 This script will try to download the result and it will keep trying until it's been downloaded. so no need to refresh the pages !
 
