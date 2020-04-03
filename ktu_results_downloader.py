@@ -13,7 +13,7 @@ YELLOW = '\033[33m'
 WHITE = '\033[m' 
 PURPLE = '\033[35m'
 CYAN = '\033[36m'
-# default downlaod fir
+# default downlaod dir
 default_dir = os.path.expanduser('~')+'/'
 # check if the pdf file for corrupt
 def check(outdir,username):
