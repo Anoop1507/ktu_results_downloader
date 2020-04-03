@@ -48,8 +48,7 @@ def main(sem,username,password,outdir,timeout_seconds):
             print(YELLOW,"trying to login",WHITE)
             req = s.get(url, headers=headers, timeout=int(timeout_seconds))
             if req.status_code != 200:
-                print(YELLOW,"Retrying to login",WHITE)
-                continue
+                raise Exception
             soup = BeautifulSoup(req.content, 'html5lib')
             login_data_params['CSRF_TOKEN'] = soup.find('input', attrs={'name': 'CSRF_TOKEN'})['value']
             req = s.post(url, params=login_data_params, headers=headers, timeout=int(timeout_seconds))
@@ -60,8 +59,7 @@ def main(sem,username,password,outdir,timeout_seconds):
             print(YELLOW,'getting studid and semid',WHITE)
             req = s.post(grade_card_url, headers=headers, params=grade_card_params, timeout=int(timeout_seconds))
             if req.status_code != 200:
-                print('retrying to get studid and semid')
-                continue
+                raise Exception
             soup = BeautifulSoup(req.content, 'html5lib')
             string_id = soup.findAll('a', {'class': 'btn btn-danger btn-xs pull-right'})[0]['href']
             string_id=string_id.split('&')
@@ -74,8 +72,7 @@ def main(sem,username,password,outdir,timeout_seconds):
                 print(YELLOW,'trying to download pdf',WHITE)
                 req = s.get(pdf_url,headers=headers, params=download_params, timeout=int(timeout_seconds))
                 if req.status_code != 200:
-                    print(YELLOW,"Retrying to download pdf",WHITE)
-                    continue
+                    raise Exception
                 file_type = req.content[:4].decode()
                 if file_type != '%PDF':
                     raise Exception
