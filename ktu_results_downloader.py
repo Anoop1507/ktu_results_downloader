@@ -15,14 +15,7 @@ PURPLE = '\033[35m'
 CYAN = '\033[36m'
 # default downlaod dir
 default_dir = os.path.expanduser('~')+'/'
-# check if the pdf file for corrupt
-def check(outdir,username):
-    with open(outdir+username+'_'+'grade_card.pdf', 'rb') as f:
-        # read magic bytes
-        bytes=f.read(4)
-        file_type=bytes.decode().strip('%')
-        return file_type
-
+# main
 def main(sem,username,password,outdir,timeout_seconds):
     string_id=[]
     headers = {
@@ -83,6 +76,9 @@ def main(sem,username,password,outdir,timeout_seconds):
                 if req.status_code != 200:
                     print(YELLOW,"Retrying to download pdf",WHITE)
                     continue
+                file_type = req.content[:4].decode()
+                if file_type != '%PDF':
+                    raise Exception
                 grade_card_file.write(req.content)
                 break
 
@@ -131,12 +127,8 @@ if args.sem and args.username:
     while True:
         try:
             main(args.sem,args.username,args.password,args.outdir, args.timeout_seconds)
-            file_type=check(args.outdir,args.username)
-            if file_type != 'PDF':
-                continue
-            else:
-                print(GREEN,"Download complete!",WHITE)
-                break
+            print(GREEN,"Download complete!",WHITE)
+            break
         except KeyboardInterrupt:
             break
         except:
