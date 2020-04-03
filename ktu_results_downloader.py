@@ -7,6 +7,13 @@ from bs4 import BeautifulSoup
 import argparse
 import os
 import getpass
+# colors
+GREEN = '\033[32m'
+YELLOW = '\033[33m'
+WHITE = '\033[m' 
+PURPLE = '\033[35m'
+CYAN = '\033[36m'
+# default downlaod fir
 default_dir = os.path.expanduser('~')+'/'
 # check if the pdf file for corrupt
 def check(outdir,username):
@@ -45,10 +52,10 @@ def main(sem,username,password,outdir,timeout_seconds):
         pdf_url = 'https://app.ktu.edu.in/eu/pub/attachments.htm'
         # Initial login
         while True:
-            print("trying to login")
+            print(YELLOW,"trying to login",WHITE)
             req = s.get(url, headers=headers, timeout=int(timeout_seconds))
             if req.status_code != 200:
-                print("Retrying to login")
+                print(YELLOW,"Retrying to login",WHITE)
                 continue
             soup = BeautifulSoup(req.content, 'html5lib')
             login_data_params['CSRF_TOKEN'] = soup.find('input', attrs={'name': 'CSRF_TOKEN'})['value']
@@ -57,7 +64,7 @@ def main(sem,username,password,outdir,timeout_seconds):
         # get studid and semid
         grade_card_params['CSRF_TOKEN'] = login_data_params['CSRF_TOKEN']
         while True:
-            print('getting studid and semid')
+            print(YELLOW,'getting studid and semid',WHITE)
             req = s.post(grade_card_url, headers=headers, params=grade_card_params, timeout=int(timeout_seconds))
             if req.status_code != 200:
                 print('retrying to get studid and semid')
@@ -71,10 +78,10 @@ def main(sem,username,password,outdir,timeout_seconds):
         # Download pdf
         with open(outdir+username+'_'+'grade_card.pdf',"wb") as grade_card_file:
             while True:
-                print('trying to download pdf')
+                print(YELLOW,'trying to download pdf',WHITE)
                 req = s.get(pdf_url,headers=headers, params=download_params, timeout=int(timeout_seconds))
                 if req.status_code != 200:
-                    print("Retrying to download pdf")
+                    print(YELLOW,"Retrying to download pdf",WHITE)
                     continue
                 grade_card_file.write(req.content)
                 break
@@ -120,7 +127,7 @@ args = parser.parse_args()
 if args.sem and args.username:
     if not args.password:
         args.password = getpass.getpass(prompt='Password: ', stream=None)
-    print('Download location: ',args.outdir)
+    print(CYAN,'Download location: ',WHITE,args.outdir)
     while True:
         try:
             main(args.sem,args.username,args.password,args.outdir, args.timeout_seconds)
@@ -128,12 +135,12 @@ if args.sem and args.username:
             if file_type != 'PDF':
                 continue
             else:
-                print("Download complete!")
+                print(GREEN,"Download complete!",WHITE)
                 break
         except KeyboardInterrupt:
             break
         except:
-            print("retrying")
+            print(PURPLE,"retrying",WHITE)
             continue
 else:
     print("Arguments missing. use -h for help")
