@@ -6,10 +6,12 @@ import urllib.parse
 from bs4 import BeautifulSoup
 import argparse
 import os
+import getpass
 default_dir = os.path.expanduser('~')+'/'
 # check if the pdf file for corrupt
 def check(outdir,username):
     with open(outdir+username+'_'+'grade_card.pdf', 'rb') as f:
+        # read magic bytes
         bytes=f.read()[:4]
         file_type=bytes.decode().strip('%')
         return file_type
@@ -117,7 +119,9 @@ parser.add_argument(
     help='request timeout in seconds')
 
 args = parser.parse_args()
-if args.sem and args.username and args.password:
+if args.sem and args.username:
+    if not args.password:
+        args.password = getpass.getpass(prompt='Password: ', stream=None)
     print('Download location: ',args.outdir)
     while True:
         try:
