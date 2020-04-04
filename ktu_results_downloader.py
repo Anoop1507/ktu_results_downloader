@@ -120,6 +120,9 @@ args = parser.parse_args()
 if args.sem and args.username:
     if not args.password:
         args.password = getpass.getpass(prompt='Password: ', stream=None)
+    # Append '/' to given path if not present
+    if args.outdir[-1] != '/':
+        args.outdir = args.outdir+'/'
     print(CYAN,'Download location: ',WHITE,args.outdir)
     while True:
         try:
